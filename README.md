@@ -1,4 +1,4 @@
-# Multimodal Fms At Uvm
+# Multimodal Foundation Models @ Uvm
 
 This is an [Observable Framework](https://observablehq.com/framework) project. To start the local preview server, run:
 
