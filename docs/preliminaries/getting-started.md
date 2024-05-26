@@ -80,40 +80,34 @@ const select = Generators.input(selectInput)
 ```js
 const data = [
   {
-    year: 1956,
+    year: 2021,
     numberOfLines: 3,
-    type: "sociology",
-    link: "https://raw.githubusercontent.com/jstonge/hello-research-groups/main/docs/assets/campbell.webp"
+    type: "microsoft",
+    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Bao2021.webp"
   },
   {
-    year: 1975,
+    year: 2023,
     numberOfLines: 3,
-    type: "evolutionary biology",
-    link: "https://raw.githubusercontent.com/jstonge/hello-research-groups/main/docs/assets/sloan_wilson.webp"
+    type: "meta",
+    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Yu2023.webp"
   },
   {
-    year: 1990,
+    year: 2022,
     numberOfLines: 3,
-    type: "cultural evolution",
-    link: "https://raw.githubusercontent.com/jstonge/hello-research-groups/main/docs/assets/boyd_richerson_1989.webp"
+    type: "meta",
+    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Gafni2022.webp"
   },
   {
     year: 2006,
     numberOfLines: 3,
-    type: "philosophy",
-    link: "https://raw.githubusercontent.com/jstonge/hello-research-groups/main/docs/assets/gilbert.webp"
+    type: "huggingface",
+    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Laurencon2023.webp"
   },
   {
-    year: 2016,
+    year: 2024,
     numberOfLines: 3,
-    type: "philosophy",
-    link: "https://raw.githubusercontent.com/jstonge/hello-research-groups/main/docs/assets/tomlinson.webp"
-  },
-  {
-    year: 2021,
-    numberOfLines: 3,
-    type: "policy studies",
-    link: "https://raw.githubusercontent.com/jstonge/hello-research-groups/main/docs/assets/digital_commons.webp"
+    type: "meta",
+    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Chameleon2024.webp"
   }
 ]
 ```
