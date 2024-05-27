@@ -38,90 +38,83 @@ figcaption code {
 
 </style>
 
+# Multimodal foundation models
+
+How does tokenization works in multimodal foundation models (FMs)?  That is, we know that in text-only FMs require tokens as input.
+In simple words, a tokenizer maps strings onto tokens. The era where tokens were just words is long gone, FMs use fancy tokenizers such as the <a href=https://github.com/google/sentencepiece>SentencePiece's byte-pair-encoding(BPE)</a> alogorithm.  As Andre Karpathy points out in his<a href="https://www.youtube.com/watch?v=zduSFxRajkE">Let's build the GPT Tokenizer</a>, the tokenizer part is often the least appreciatebut the crucial part that makes everything break or succeed. 
+
+How does tokenization works when you have more than one mode in your FMs?  Even before answering that, what do we mean with multimodal FMs.  For now, we will only talk about vision+text undertanding multimodality.  We put aside other senses but we might come back to it. This is where the leading teams in the industry are mostly pushing currently anyway. Naively, does a FM that can embed images in a text-only generated embedding space counts as multimodal? Does the pretraining step absolutely needs to be multimodal for FMs to inheritate that quality? 
+
+We take as starting point to answer those question the following paper; [Chameleon: Mixed-Modal Early-Fusion Foundation
+Models](https://www.semanticscholar.org/reader/32112b798f70faab00e14806f51d46058cf5e597)[^1] the most recent preprint by the Chameleon team at Meta working on the topic, 
+
+## Timeline
+
 ```js
-const selectInput = Inputs.radio(["evolutionary biology"], {value: "all"})
+const selectInput = Inputs.radio(["all", "meta", "huggingface", "microsoft"], {value: "all", label: "team contribution"})
 const select = Generators.input(selectInput)
 ```
 
 <div>${selectInput}</div>
-<div>${resize((width) => 
-  Plot.plot({
-    width,
-    height: 600,
-    marginLeft: 150, marginBottom: 50, marginRight: 180,
-    x: { axis: null },
-    y: { axis: null, domain: [-200 / 2, 200 / 2] },
-    marks: [
-      Plot.ruleY([0]),
-      Plot.ruleX(
-        data.filter(d => select === "all" ? d : d.type == select), 
-        { x: "year", y: (d, i) => (i % 2 === 0 ? 25 : -25)  }),
-      Plot.dot(data.filter(d => select === "all" ? d : d.type == select), { x: "year", fill: "#fff", stroke: "type" }),
-      Plot.text(data.filter(d => select === "all" ? d : d.type == select), {
-        x: "year", y: (d, i) => (i % 2 === 0 ? -4 : 4 ), text: (d) => d.year.toString()
-      }),
-      Plot.image(
-        data.filter(d => select === "all" ? d : d.type == select), 
-        { x: d => select === "philosophy" ? d.year : d.year === 2006 ? 1998 : d.year, 
-          y: (d, i) =>
-          i % 2 === 0
-            ? 30 + d.numberOfLines * 16 * 0.5
-            : -30 - d.numberOfLines * 16 * 0.5,
-        src: "link",
-        width: 270,
-        title: "text", tip: true, title: "type"
-      })
-    ],
-    caption: "Most articles come from different communities with distinct interests and groups. Cambell was a sociologist, psychologists, and organizational scientists who argued that groups should have some ontological status as being real. Echoing this sentiment, Amie Thomasson begins her recent paper on the ontology of social groups in a similar fashion, asking why is it such a big deal to make the claim that groups exist. "
-  })
-)}
+
+<div class="grid grid-cols-3">
+  <div class="card grid-colspan-1">
+  text goes here
+  </div>
+  <div class="grid-colspan-2">${resize((width) => 
+    Plot.plot({
+      width,
+      height: 1200,
+      y: { axis: null },
+      x: { axis: null, domain: [-200 / 2, 200 / 2] },
+      marks: [
+        Plot.ruleX([0]),
+        Plot.ruleY(
+          refs.filter(
+            d => select === "all" ? d : d.entryTags.type == select), 
+            { y: d => d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day, x: (d, i) => (i % 2 === 0 ? 25 : -25)  }
+          ),
+        Plot.dot(
+          refs.filter(d => select === "all" ? d : d.entryTags.type == select), 
+          { 
+            y: d => d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day, 
+            fill: "#fff", 
+            stroke: d => d.entryTags.type, 
+            tip: true,
+            title: d => d.entryTags.url,
+            textWidth: 200
+          }),
+        Plot.text(
+          refs.filter(d => select === "all" ? d : d.entryTags.type == select), 
+          { 
+            x: (d, i) => (i % 2 === 0 ? -45 : 45 ), 
+            y: d => d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day, 
+            text: d => `${d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day} (${d.entryTags.url})`,
+          }
+        ),
+        Plot.image(
+          refs.filter(d => select === "all" ? d : d.entryTags.type == select), 
+          { 
+            y: d => d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day,  
+            x: (d, i) => i % 2 === 0  ? 30 + 3 * 16 * 0.5 : -30 - 3 * 16 * 0.5,
+            src: d => d.entryTags.link,
+            width: 270
+        })
+      ],
+      caption: ""
+    })
+  )}
+  </div>
 </div>
 
+<!-- LOAD AND PARSE BIBTEX -->
+
 ```js
-const data = [
-  {
-    year: 2021,
-    numberOfLines: 3,
-    type: "microsoft",
-    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Bao2021.webp"
-  },
-  {
-    year: 2023,
-    numberOfLines: 3,
-    type: "meta",
-    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Yu2023.webp"
-  },
-  {
-    year: 2022,
-    numberOfLines: 3,
-    type: "meta",
-    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Gafni2022.webp"
-  },
-  {
-    year: 2006,
-    numberOfLines: 3,
-    type: "huggingface",
-    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Laurencon2023.webp"
-  },
-  {
-    year: 2024,
-    numberOfLines: 3,
-    type: "meta",
-    link: "https://raw.githubusercontent.com/jstonge/multimodal-fms-at-uvm/main/docs/assets/Chameleon2024.webp"
-  }
-]
+import bibtexParse from "npm:bibtex-parse-js";
 ```
-
-# Grontology
-
-In the previous section, we defined the rise of computational works as a shifting ground that might benefit particular research groups. To show that, we need to define what are groups and why they matter.
-
-## Back to the basics
-
-We like to put marbles, books, or cards that share some quality or feature together. This shared property---color, size, and so---allows for ordering. We call this ordered collection a grouping, or cluster, and they sometime serve a functional goal, such as search for a good hand in card games. Or not, putting similar marbles or books together based on color might just be pleasing. Philosophers call this grouping 'nautral kinds'. Similarly, one can cluster  based on relation of interest. For instance, Mars and Jupiter are similar in that they orbit the sun. Otherwise, they couldn't be more different as planet.
-
-A persisting fact in social psychology is how WEIRD people put individuals, or entities, before interactions. When asked to introspect during the 'who am i' test, psychologists found again and again that WEIRD people define themselves in terms of individual attributes. In many other cultures, such as Japan, they might define themselves with respect to their relationships, e.g. 'I am Sora's professor' instead of 'I am a teacher'. Thus, another way to group stuff is based on relationship, e.g. 'the hammer is to the nail as the screwdriver is to the screw'. In linguistics, we can think of pairs of words co-ocuring. In Jane Austin's Pride and Prejudice, 'Elizabeth' is most correlated with words such as 'looked',  'walked', 'sat', 'listened, or 'answered'. 
-
-We can build networks out of these interactions because we now have a notion of nodes and edges. Until recently, researchers in network science did not realize how useful it is to adopt edge-first view; clustering on links lead naturally to the idea of hierarchy (groups part of groups) and overlapping communities (I am both a teacher and a father) [CITE BAGROW]. 
-
-Those parts composing the interactions might or might not entail _intentionality_; intentional agents have mental states. Note the difference here between a grouping with or without intentionality. A group of sperm whales can be classified as such based on some shared features, regardless them being intentional agents. Or they can be called a group based on intentional features, such as males believing they are not part of their family groups. Indeed, most sperm whales have a matrilineally based social organization, meaning that males tend to leave the clans while female offsprings stay with their moms (CITE whitehead). The grouping has some intentionality; there is a sense where individuals have mental states that can tell whether they are part of the group or not. The young males "believe" they are not part of their mothers' group when they come to age, not unlike how traditional matrilineal societies work in humans. 
+```js
+const raw_refs = FileAttachment("../refs.bib").text()
+```
+```js
+const refs = bibtexParse.toJSON(raw_refs);
+```
