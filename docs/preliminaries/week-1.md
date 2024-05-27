@@ -46,7 +46,7 @@ In simple words, a tokenizer maps strings onto tokens. The era where tokens were
 How does tokenization works when you have more than one mode in your FMs?  Even before answering that, what do we mean with multimodal FMs.  For now, we will only talk about vision+text undertanding multimodality.  We put aside other senses but we might come back to it. This is where the leading teams in the industry are mostly pushing currently anyway. Naively, does a FM that can embed images in a text-only generated embedding space counts as multimodal? Does the pretraining step absolutely needs to be multimodal for FMs to inheritate that quality? 
 
 We take as starting point to answer those question the following paper; [Chameleon: Mixed-Modal Early-Fusion Foundation
-Models](https://www.semanticscholar.org/reader/32112b798f70faab00e14806f51d46058cf5e597)[^1] the most recent preprint by the Chameleon team at Meta working on the topic, 
+Models](https://www.semanticscholar.org/reader/32112b798f70faab00e14806f51d46058cf5e597). We navigate the paper's citation graph to better understand what the story is about. For each paper, we have another [directory](../papers/) with detailed information about the paper. Here we try to keep the narrative fairly high-level.
 
 ## Timeline
 
@@ -59,7 +59,7 @@ const select = Generators.input(selectInput)
 
 <div class="grid grid-cols-3">
   <div class="card grid-colspan-1">
-  text goes here
+  Ideas in construction.
   </div>
   <div class="grid-colspan-2">${resize((width) => 
     Plot.plot({
@@ -87,9 +87,9 @@ const select = Generators.input(selectInput)
         Plot.text(
           refs.filter(d => select === "all" ? d : d.entryTags.type == select), 
           { 
-            x: (d, i) => (i % 2 === 0 ? -45 : 45 ), 
+            x: (d, i) => (i % 2 === 0 ? -13 : 13 ), 
             y: d => d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day, 
-            text: d => `${d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day} (${d.entryTags.url})`,
+            text: d => `${d.entryTags.year+"-"+d.entryTags.month+"-"+d.entryTags.day}`,
           }
         ),
         Plot.image(

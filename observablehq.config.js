@@ -2,16 +2,24 @@
 export default {
   root: "docs", // path to the source root for preview
   output: "dist", // path to the output root for build
-  title: "Hello Research Groups",
+  title: "Hello multimodal Fms",
   pages: [
     {
       name: "Preliminaries",
       open: true,
       pager: "preliminaries",
       pages: [
-        { name: "Classify computational works", path: "preliminaries/getting-started" },
+        { name: "Week 1", path: "preliminaries/week-1" },
       ]
     },
+    {
+      name: "Papers deep dive",
+      open: false,
+      pager: "papers",
+      pages: [
+        { name: "Bao2021BEiTBP", path: "papers/Bao2021BEiTBP" },
+      ]
+    }
   ],
 
   // Content to add to the head of the page, e.g. for a favicon:
